@@ -4,6 +4,8 @@ import requests
 import io_data
 import mail
 import getpass
+import os
+import time
 
 def browse(url, keywords):
     r = requests.get(url)
@@ -27,15 +29,15 @@ def browse(url, keywords):
             p_middle = result.find(keyword, p_middle+1)
             if not io_data.exist(idnum):
                 io_data.insert(idnum, link, title)
-                print("New record added.")
+                print("-"*21 + " New record added.")
                 [host, user, passwd] = io_data.get_mail()
                 reces = io_data.get_receivers()
                 subject = "交响音乐会有新演出更新"
                 content = "演出名称：" + title + "\n演出链接：" + link
                 mail.send_mail(host, user, passwd, subject, reces, content)
                 
-def initial():
-    io_data.init("data.xml")
+def initial(filepath):
+    io_data.init(filepath)
     rece_not_empty = 0
     for child in io_data.mail:
         if len(child.text) != 0:
@@ -51,8 +53,11 @@ def initial():
         io_data.set_mail(in_host, in_user, in_passwd, in_receivers)
 
 if __name__ == '__main__':
+    print("[%s] Job start: " % time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     url = 'http://www.hall.tsinghua.edu.cn/columnEx/pwzx_hdap/yc/1'
     keywords = ["交响"]
-    initial()
+    path = os.path.dirname(os.path.abspath(__file__)) + "/data.xml"
+    initial(path)
     browse(url, keywords)
-    io_data.save("data.xml")
+    io_data.save(path)
+    print("[%s] Job stop normally." % time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))

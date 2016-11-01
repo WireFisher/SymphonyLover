@@ -18,9 +18,9 @@ def send_mail(host, user, passwd, subject, receivers, content):
         s.connect(host, 25)
         s.login(user, passwd)
         s.sendmail(sender, receivers, message.as_string())
-        print("E-mail delivered")
+        print("-"*21 +" E-mail delivered")
     except smtplib.SMTPException:
-        print("Error: Can not delivere e-mail properly")
+        print("-"*21 +" Error: Can not delivere e-mail properly")
 
 if __name__ == '__main__':
     host = 'smtp.xxx.com'
