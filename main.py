@@ -18,6 +18,8 @@ def browse(url, keywords):
             p_start = result.rfind("<a ", 0, p_middle)
             trim = result[p_start:p_end]
             keyword_link = ['/info/pwzx_hdap/','/info/yc/']
+            idnum = ""
+            link = ""
             for key in keyword_link:
                 p_key = trim.find(key)
                 if (p_key != -1):
@@ -27,6 +29,8 @@ def browse(url, keywords):
             p_text = trim.find(">")
             title = trim[p_text+1:]
             p_middle = result.find(keyword, p_middle+1)
+            if idnum == "":
+                continue
             if not io_data.exist(idnum):
                 io_data.insert(idnum, link, title)
                 print("-"*21 + " New record added.")
@@ -55,7 +59,7 @@ def initial(filepath):
 if __name__ == '__main__':
     print("[%s] Job start: " % time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     url = 'http://www.hall.tsinghua.edu.cn/columnEx/pwzx_hdap/yc/1'
-    keywords = ["交响"]
+    keywords = ["交响", "古典"]
     path = os.path.dirname(os.path.abspath(__file__)) + "/data.xml"
     initial(path)
     browse(url, keywords)
